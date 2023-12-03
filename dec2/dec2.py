@@ -12,6 +12,7 @@ green_limit = 13
 blue_limit = 14
 
 possible_games = []
+game_powers = []
 
 for line in input:
     possible = True
@@ -30,6 +31,9 @@ for line in input:
     # This breaks each set into an item in a list
     # [' 7 red', ' 5 blue, 11 red, 8 green', ' 8 red, 3 green, 2 blue\n']
 
+    color_counts_max = {'green': 0, 'blue': 0, 'red': 0}
+    # Create a dictionary to track max count value of each colour in a game (line)
+
     for game_set in game_string:
         color_counts = {'green': 0, 'blue': 0, 'red': 0}
         # Create a dictionary to track the count of each colour in each set
@@ -38,7 +42,6 @@ for line in input:
         # After the split on , we get a list with an item for each colour in the set
         # e.g [' 4 green', ' 7 blue']
         for part in set_parts:
-            print(part)
             number, colour = part.strip().split(' ')
             # part would be e.g. 4 green
             # After the split on space we get two variables number and colour
@@ -52,12 +55,31 @@ for line in input:
             # If any of the colour counts exceed the limit during a given set, set possible to False
             # If a single set of a game exceeds the count then the game was not possible
 
+            # Check if current colour count is greater than stored color_counts_max['colour'] value
+            # if so, set the color_counts_max['colour'] count to current color_counts['colour']
+            if color_counts['red'] > color_counts_max['red']:
+                color_counts_max['red'] = color_counts['red']
+
+            if color_counts['green'] > color_counts_max['green']:
+                color_counts_max['green'] = color_counts['green']
+
+            if color_counts['blue'] > color_counts_max['blue']:
+                color_counts_max['blue'] = color_counts['blue']
+
+    game_power = color_counts_max['red'] * color_counts_max['blue'] * color_counts_max['green']
+    # Generate the power of the game (line) by multiplying them all together
+    game_powers.append(game_power)
+    # Add the sum of the multiplation to a list so we can sum it later
+
     if possible == True:
         possible_games.append(int(game_id))
     # If the game was possible add it's game_id to a list
 
 print(sum(possible_games))
 # Answer is: 2285
+
+print(sum(game_powers))
+# Answer is: 77021
 
 
 
